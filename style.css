@@ -42,10 +42,10 @@ nav a:hover,nav a:focus-visible,nav a.on{color:#fff;outline:none}
 .js [data-fx=g]{opacity:1;transform:scaleX(var(--p,0));transform-origin:left center}
 .js [data-fx=v]{opacity:1}
 .split .w{display:inline-block;white-space:nowrap}
-.split .ch{--q:clamp(0,calc(var(--p,0) * 1.8 - var(--k) * .8),1);display:inline-block;opacity:var(--q);transform:translate(calc((1 - var(--q)) * var(--dx)),calc((1 - var(--q)) * var(--dy))) rotate(calc((1 - var(--q)) * var(--dr)));background:linear-gradient(180deg,#f6f7f8 10%,#8d9094 90%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.split .ch{--q:clamp(0,calc(var(--p,0) * 1.8 - var(--k) * .8),1);display:inline-block;opacity:var(--q);transform:translate(calc((1 - var(--q)) * var(--dx)),calc((1 - var(--q)) * var(--dy))) rotate(calc((1 - var(--q)) * var(--dr)));position:relative}
 h2.split::after{content:"";display:block;height:2px;margin-top:14px;width:calc(var(--p,0) * 100%);max-width:240px;background:linear-gradient(90deg,#c9ccd1,transparent)}
 
-section{padding:100px 0}
+section{padding:56px 0}
 .wrap{max-width:1040px;margin:0 auto;padding:0 24px}
 h2{font-size:clamp(34px,7vw,64px);line-height:1.05;margin-bottom:28px}
 h3{font-size:20px;margin-bottom:8px;color:var(--silver)}
@@ -81,11 +81,11 @@ h3{font-size:20px;margin-bottom:8px;color:var(--silver)}
 .time::before{content:"";position:absolute;left:0;top:0;bottom:0;width:1px;background:#6a6d71;transform:scaleY(var(--p,0));transform-origin:top}
 .time>div{position:relative;padding-bottom:26px}
 .time>div::before{content:"";position:absolute;left:-33px;top:9px;width:13px;height:13px;background:var(--silver);clip-path:polygon(50% 0,100% 50%,50% 100%,0 50%)}
-footer{padding:90px 24px 100px;text-align:center;border-top:1px solid #1d1d1d}
+footer{padding:60px 24px 100px;text-align:center;border-top:1px solid #1d1d1d}
 .t{font-family:'Angel','Felix Titling',serif;font-size:clamp(50px,14vw,150px);line-height:1}
 .small{font-size:16px;margin-top:26px}
 
-@media(max-width:820px){body{font-size:18px}.cols,.three,.types,.grid{grid-template-columns:1fr}.pals{grid-template-columns:1fr 1fr}.sw{min-height:160px}section{padding:70px 0}.big{font-size:48px}}
+@media(max-width:820px){body{font-size:18px}.cols,.three,.types,.grid{grid-template-columns:1fr}.pals{grid-template-columns:1fr 1fr}.sw{min-height:160px}section{padding:36px 0}.big{font-size:48px}}
 @media(prefers-reduced-motion:reduce){.rest>*{animation:none}html{scroll-behavior:auto}}
 
 /* ===== grunge / nu-metal: glitch, vibración, púas y amplificador ===== */
@@ -95,13 +95,9 @@ body::after{opacity:calc(.14 + var(--vol,0) * .3)}
 .slices{filter:drop-shadow(var(--gx,0px) var(--gy,0px) 0 rgba(122,28,31,.75)) drop-shadow(calc(var(--gx,0px) * -1) calc(var(--gy,0px) * -1) 0 rgba(201,204,209,.3)) drop-shadow(0 0 22px #c9ccd133)}
 .stage img{filter:drop-shadow(var(--gx,0px) var(--gy,0px) 0 rgba(122,28,31,.75)) drop-shadow(calc(var(--gx,0px) * -1) calc(var(--gy,0px) * -1) 0 rgba(201,204,209,.3))}
 .js section[data-fx]{will-change:auto}
-section[data-fx=v]::before{content:"";display:block;height:16px;width:calc(var(--p,0) * 100%);max-width:1040px;margin:0 auto 56px;background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='30' height='16'><polygon points='0,16 15,0 30,16' fill='%23b9bcc0'/><polygon points='9,16 15,5 21,16' fill='%23050505'/></svg>") repeat-x left bottom}
+section[data-fx=v]::before{content:"";display:block;height:clamp(60px,12vw,110px);margin:0 auto 18px;max-width:640px;background:url(assets/espinos.png) center/contain no-repeat;clip-path:inset(0 calc((1 - var(--p,0)) * 50%) 0 calc((1 - var(--p,0)) * 50%));opacity:.9}
 @keyframes jit{0%{transform:translate(0)}25%{transform:translate(-3px,1px) skewX(-3deg)}50%{transform:translate(3px,-2px) skewX(3deg)}75%{transform:translate(-2px,2px)}100%{transform:translate(0)}}
 .card:hover,.sw:hover,.grid article:hover,nav a:hover{animation:jit .3s steps(2) 1}
-.split .ch.hit{animation:hit .45s steps(3)}
-@keyframes hit{30%{transform:translate(-6px,3px) skewX(-14deg) scale(1.1);filter:drop-shadow(4px 0 0 #7a1c1f)}65%{transform:translate(5px,-3px) skewX(10deg);filter:drop-shadow(-3px 0 0 #c9ccd1)}}
-.split.blast .ch{animation:blast .8s cubic-bezier(.2,.8,.2,1) calc(var(--k) * .25s) both}
-@keyframes blast{0%{transform:none}35%{transform:translate(calc(var(--dx) * .8),calc(var(--dy) * .8)) rotate(var(--dr));opacity:.4}100%{transform:none;opacity:1}}
 #amp{position:fixed;right:max(14px,env(safe-area-inset-right,0px));bottom:calc(env(safe-area-inset-bottom,0px) + 14px);z-index:75;display:flex;align-items:center;gap:12px;padding:10px 24px;background:#0a0a0acc;border:1px solid #3a3a3a;clip-path:polygon(0 0,94% 0,100% 50%,94% 100%,0 100%,6% 50%);font-family:Cinzel,serif;font-size:12px;letter-spacing:.2em;color:var(--silver)}
 #amp input{-webkit-appearance:none;appearance:none;width:110px;height:4px;background:linear-gradient(90deg,#7a1c1f var(--v,0%),#2b2b2b var(--v,0%));outline:none;cursor:pointer}
 #amp input::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:22px;background:#d9dbde;clip-path:polygon(50% 0,100% 50%,50% 100%,0 50%)}
@@ -112,3 +108,8 @@ section[data-fx=v]::before{content:"";display:block;height:16px;width:calc(var(-
 #amp button[aria-pressed=true]{color:#7a1c1f;border-color:#7a1c1f;text-decoration:line-through}
 @media(max-width:820px){#amp{left:14px;right:14px;justify-content:center}#amp input{flex:1;width:auto}}
 @media(prefers-reduced-motion:reduce){.card:hover,.sw:hover,.grid article:hover,nav a:hover{animation:none}}
+
+/* letras que se cortan al subir y bajar: cada letra son dos mitades que se desplazan con la velocidad del scroll */
+.split .ch i{display:block;font-style:normal;background:linear-gradient(180deg,#f6f7f8 10%,#8d9094 90%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.split .ch .a{clip-path:inset(0 0 calc((98 - var(--cp,50) + var(--cut,0) * 5) * 1%) 0);translate:calc(var(--cut,0) * var(--cd,1) * var(--cs,10) * 1px) calc(var(--cut,0) * -2px)}
+.split .ch .b{position:absolute;inset:0;clip-path:inset(calc((var(--cp,50) - 2 + var(--cut,0) * 5) * 1%) 0 0 0);translate:calc(var(--cut,0) * var(--cd,1) * var(--cs,10) * -1px) calc(var(--cut,0) * 2px)}
