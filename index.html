@@ -21,7 +21,7 @@
 </header>
 
 <main>
-<section id="nombre"><div class="wrap">
+<section id="nombre" data-fx="v"><div class="wrap">
   <h2 class="split">Un nombre que vibra</h2>
   <div class="eq">
     <span class="a" data-fx="l">Zumbido</span><span class="pl" data-fx="z" data-d=".15">+</span><span class="a" data-fx="r">Volumen</span><span class="pl" data-fx="z" data-d=".35">=</span><span class="vohm silver" data-fx="u" data-d=".45">VOHM</span>
@@ -30,7 +30,7 @@
   <p class="lead dim" data-fx="r">La diéresis sobre la O aporta un carácter industrial y distintivo. Es la pequeña marca que vuelve el nombre irrepetible.</p>
 </div></section>
 
-<section id="esencia"><div class="wrap">
+<section id="esencia" data-fx="v"><div class="wrap">
   <h2 class="split">Crudeza con precisión</h2>
   <p class="lead" data-fx="u">La estética grunge y nu-metal guía toda la marca: crudeza, intensidad y una fuerte carga emocional. VÖHM diseña arquitecturas de exhibición que dan impacto visual a tu joyería.</p>
   <div class="three">
@@ -40,7 +40,7 @@
   </div>
 </div></section>
 
-<section id="logo"><div class="wrap cols">
+<section id="logo" data-fx="v"><div class="wrap cols">
   <div><h2 class="split">Una V hecha de filo</h2>
   <p data-fx="l">Me inspiré en púas de guitarra y piezas metálicas afiladas. Formas geométricas puntiagudas y simétricas transmiten agresividad y tensión, y juntas construyen la V inicial del nombre.</p>
   <p class="dim" data-fx="l" data-d=".15">Después incorporé una gema en el centro: equilibra la composición y ancla la marca al mundo de la joyería.</p>
@@ -48,7 +48,7 @@
   <div class="stage" data-fx="r"><img data-fx="z" data-d=".3" src="assets/logo.png" alt="Logotipo VÖHM"></div>
 </div></section>
 
-<section id="color"><div class="wrap">
+<section id="color" data-fx="v"><div class="wrap">
   <h2 class="split">Oscuridad con peso</h2>
   <p class="lead" data-fx="u">Tonos oscuros y neutros que refuerzan el contraste y la energía del género. El negro aporta misterio, el rojo profundo carga emocional y el blanco hueso devuelve claridad sin perder sobriedad.</p>
   <div class="pals">
@@ -59,7 +59,7 @@
   </div>
 </div></section>
 
-<section id="tipo"><div class="wrap">
+<section id="tipo" data-fx="v"><div class="wrap">
   <h2 class="split">Elegante y roto</h2>
   <p class="lead" data-fx="u">Combiné serifs clásicas, que evocan la joyería tradicional, con una serif intervenida con cortes irregulares: desgaste, rebeldía y crudeza.</p>
   <div class="types">
@@ -69,7 +69,7 @@
   </div>
 </div></section>
 
-<section id="reticula"><div class="wrap">
+<section id="reticula" data-fx="v"><div class="wrap">
   <h2 class="split">Construcción y límites</h2>
   <p class="lead" data-fx="u">El logotipo se apoya en una retícula modular (x, 2x, 3x, 10x, 12x, 16x) que mantiene las proporciones entre isotipo y letras.</p>
   <div class="xs" aria-hidden="true"><i data-fx="g" style="--w:20px"></i><i data-fx="g" data-d=".12" style="--w:60px"></i><i data-fx="g" data-d=".24" style="--w:200px"></i><i data-fx="g" data-d=".36" style="--w:120px"></i><i data-fx="g" data-d=".48" style="--w:160px"></i></div>
@@ -80,7 +80,7 @@
   </div>
 </div></section>
 
-<section id="apps"><div class="wrap">
+<section id="apps" data-fx="v"><div class="wrap">
   <h2 class="split">La marca en objetos</h2>
   <p class="lead" data-fx="u">El grunge y el nu-metal hoy conviven con estilos de vida activos. Por eso la identidad se extiende a piezas de uso cotidiano, cada una con su técnica.</p>
   <div class="grid">
@@ -91,7 +91,7 @@
   </div>
 </div></section>
 
-<section id="crisis"><div class="wrap">
+<section id="crisis" data-fx="v"><div class="wrap">
   <h2 class="split">Cuando la marca se pone a prueba</h2>
   <p class="lead" data-fx="u">Caso de gestión de crisis: VÖHM lanzó una colección colaborativa inspirada en experiencias reales. Una participante se sintió expuesta y la marca fue acusada de usar el dolor como recurso creativo.</p>
   <div class="quote"><span class="split">No contamos vidas.</span><span class="split">Traducimos emociones.</span></div>
@@ -109,5 +109,7 @@
   <p class="tag" data-fx="u">THE WEIGHT OF BEING</p>
   <p class="dim small" data-fx="u" data-d=".2">José Luis Casillas Martín · Licenciatura en Diseño Interactivo<br>Identidad e Imagen Corporativa, 2026</p>
 </footer>
+<div id="vig" aria-hidden="true"></div>
+<div id="amp" role="group" aria-label="Amplificador"><span>VOL</span><input id="vol" type="range" min="0" max="100" value="0" aria-label="Volumen del amplificador"><output id="volout">0</output><button id="mute" type="button" aria-pressed="false" aria-label="Silenciar sonido">♪</button></div>
 <script src="script.js"></script>
 </body></html>
