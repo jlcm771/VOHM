@@ -1,244 +1,87 @@
 (function () {
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var root = document.documentElement;
+  var root = document.documentElement, hero = document.querySelector('.hero');
+  function clamp(v) { return v < 0 ? 0 : v > 1 ? 1 : v; }
+  function rnd(a, b) { return Math.round(a + Math.random() * (b - a)); }
 
-  // 1. Aparición de elementos al hacer scroll
-  var io = new IntersectionObserver(function (es) {
-    es.forEach(function (e) {
-      if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+  // 1. Títulos que se arman letra por letra
+  document.querySelectorAll('.split').forEach(function (el) {
+    var label = el.textContent.trim(), total = label.replace(/\s/g, '').length, k = 0;
+    el.setAttribute('aria-label', label); el.textContent = '';
+    label.split(/(\s+)/).forEach(function (w) {
+      if (!w) return;
+      if (/^\s+$/.test(w)) { el.appendChild(document.createTextNode(' ')); return; }
+      var word = document.createElement('span'); word.className = 'w'; word.setAttribute('aria-hidden', 'true');
+      Array.from(w).forEach(function (c) {
+        var s = document.createElement('span'); s.className = 'ch'; s.textContent = c;
+        s.style.cssText = '--k:' + (k++ / total).toFixed(3) + ';--dx:' + rnd(-90, 90) + 'px;--dy:' + rnd(-110, 110) + 'px;--dr:' + rnd(-120, 120) + 'deg';
+        word.appendChild(s);
+      });
+      el.appendChild(word);
     });
-  }, { threshold: 0.12 });
-  document.querySelectorAll('.rv').forEach(function (el, i) {
-    el.style.transitionDelay = (i % 3) * 90 + 'ms';
-    io.observe(el);
   });
 
-  // 2. Barra de progreso, parallax y menú activo
-  var bar = document.getElementById('progress');
-  var floats = document.querySelectorAll('.fl');
-  floats.forEach(function (f) { f.style.setProperty('--k', f.dataset.speed || 0); });
-  var links = document.querySelectorAll('nav a');
-  var secs = Array.prototype.map.call(links, function (a) {
-    return document.querySelector(a.getAttribute('href'));
+  // 2. Elementos ligados al scroll
+  var items = [].map.call(document.querySelectorAll('[data-fx],.split'), function (el) {
+    return { el: el, d: parseFloat(el.dataset.d) || 0, cur: 0, y: 0, v: '' };
   });
-  var ticking = false;
-  function onScroll() {
-    var y = window.scrollY, h = root.scrollHeight - window.innerHeight;
+  function pageTop(el) { var y = 0; while (el) { y += el.offsetTop; el = el.offsetParent; } return y; }
+  function measure() { items.forEach(function (it) { it.y = pageTop(it.el); }); }
+
+  // 3. Logo del inicio: se arma por tiras y se desarma al bajar
+  var box = document.getElementById('slices'), img = box && box.querySelector('img');
+  var slices = [], t0 = performance.now(), N = 9;
+  function build() {
+    if (!img.naturalWidth || slices.length) return;
+    for (var i = 0; i < N; i++) {
+      var s = document.createElement('div'); s.className = 'sl';
+      s.style.backgroundImage = 'url("' + img.src + '")';
+      s.style.clipPath = 'inset(' + Math.max(0, i * 100 / N - 0.3) + '% 0 ' + Math.max(0, (N - 1 - i) * 100 / N - 0.3) + '% 0)';
+      box.appendChild(s); slices.push(s);
+    }
+    box.classList.add('on'); t0 = performance.now(); kick();
+  }
+  if (box) { if (img.complete) build(); else img.addEventListener('load', build); }
+
+  // 4. Bucle de animación (solo corre mientras algo se mueve)
+  var running = false;
+  function kick() { if (!running) { running = true; requestAnimationFrame(tick); } }
+  function tick(now) {
+    var h = window.innerHeight, w = window.innerWidth, sy = window.scrollY;
+    var atEnd = sy + h >= root.scrollHeight - 2, moving = false, intro = false;
+    items.forEach(function (it) {
+      var p = clamp((h * 0.95 - (it.y - sy)) / (h * 0.42));
+      p = clamp((p - it.d) / (1 - it.d)); p = 1 - Math.pow(1 - p, 3);
+      if (atEnd && it.y - sy < h) p = 1;
+      if (reduce) p = 1;
+      var diff = p - it.cur;
+      if (Math.abs(diff) < 0.001) it.cur = p; else { it.cur += reduce ? diff : diff * 0.14; moving = true; }
+      var v = it.cur.toFixed(3);
+      if (v !== it.v) { it.v = v; it.el.style.setProperty('--p', v); }
+    });
+    var hp = clamp(sy / (h * 0.9));
+    if (hero) hero.style.setProperty('--hp', hp.toFixed(3));
+    slices.forEach(function (s, i) {
+      var ip = reduce ? 1 : clamp((now - t0 - i * 80) / 900); if (ip < 1) intro = true;
+      var ep = 1 - Math.pow(1 - ip, 4), dir = i % 2 ? 1 : -1;
+      s.style.transform = 'translate(' + (dir * ((1 - ep) * w * 0.8 + hp * (140 + i * 22))).toFixed(1) + 'px,' + (hp * (i - 4) * 16).toFixed(1) + 'px) rotate(' + (dir * hp * 4).toFixed(2) + 'deg)';
+      s.style.opacity = clamp(ep * (1 - hp * 1.15)).toFixed(3);
+    });
+    if (moving || intro) requestAnimationFrame(tick); else running = false;
+  }
+
+  // 5. Barra de progreso y menú activo
+  var bar = document.getElementById('progress'), links = document.querySelectorAll('nav a');
+  var secs = Array.prototype.map.call(links, function (a) { return document.querySelector(a.getAttribute('href')); });
+  function nav() {
+    var y = window.scrollY, h = root.scrollHeight - window.innerHeight, cur = 0;
     bar.style.transform = 'scaleX(' + (h > 0 ? y / h : 0) + ')';
-    if (!reduce) root.style.setProperty('--sy', -y + 'px');
-    var cur = 0;
     secs.forEach(function (s, i) { if (s && s.getBoundingClientRect().top < window.innerHeight * 0.4) cur = i; });
     links.forEach(function (a, i) { a.classList.toggle('on', i === cur && y > 80); });
-    ticking = false;
   }
-  window.addEventListener('scroll', function () {
-    if (!ticking) { ticking = true; requestAnimationFrame(onScroll); }
-  }, { passive: true });
-  onScroll();
-
-  // 3. Foco de luz que sigue al cursor y tilt en tarjetas
-  var spot = document.getElementById('spot');
-  window.addEventListener('pointermove', function (e) {
-    root.style.setProperty('--mx', e.clientX + 'px');
-    root.style.setProperty('--my', e.clientY + 'px');
-  }, { passive: true });
-  if (!reduce) {
-    document.querySelectorAll('.card').forEach(function (c) {
-      c.addEventListener('pointermove', function (e) {
-        var r = c.getBoundingClientRect();
-        var x = (e.clientX - r.left) / r.width - 0.5, y = (e.clientY - r.top) / r.height - 0.5;
-        c.style.transform = 'perspective(700px) rotateY(' + x * 10 + 'deg) rotateX(' + -y * 10 + 'deg) translateZ(6px)';
-      });
-      c.addEventListener('pointerleave', function () { c.style.transform = ''; });
-    });
-  }
-
-  // 4. Mundo interactivo: cadenas, cruces góticas y púas (canvas)
-  var cv = document.getElementById('dust'), ctx = cv.getContext('2d');
-  var TAU = Math.PI * 2, W = 0, H = 0, lw = 0, lh = 0, T = 0, lastY = window.scrollY, scrollV = 0;
-  var dpr = Math.min(window.devicePixelRatio || 1, 2);
-  var ptr = { x: -999, y: -999, vx: 0, vy: 0 };
-  var chains = [], crosses = [], thorns = [], shocks = [];
-  function rnd(a, b) { return a + Math.random() * (b - a); }
-  function wrap(a) { return ((a + Math.PI) % TAU + TAU) % TAU - Math.PI; }
-
-  var crossPath = (function () {
-    var p = new Path2D();
-    [70, 52, 100, 52].forEach(function (L, k) {
-      var a = k * Math.PI / 2, c = Math.cos(a), s = Math.sin(a);
-      [[-5, -5], [-5, -(L - 20)], [-14, -(L - 9)], [0, -L], [14, -(L - 9)], [5, -(L - 20)], [5, -5]].forEach(function (q, i) {
-        var x = q[0] * c - q[1] * s, y = q[0] * s + q[1] * c;
-        if (i) p.lineTo(x, y); else p.moveTo(x, y);
-      });
-      p.closePath();
-    });
-    p.moveTo(0, -11); p.lineTo(11, 0); p.lineTo(0, 11); p.lineTo(-11, 0); p.closePath();
-    return p;
-  })();
-  var gradCross = ctx.createLinearGradient(-60, -100, 60, 100);
-  gradCross.addColorStop(0, '#e6e8eb'); gradCross.addColorStop(0.35, '#80848a');
-  gradCross.addColorStop(0.7, '#26282b'); gradCross.addColorStop(1, '#a4a8ae');
-  var gradThorn = ctx.createLinearGradient(0, 0, 100, 0);
-  gradThorn.addColorStop(0, '#161718'); gradThorn.addColorStop(0.6, '#74787e'); gradThorn.addColorStop(1, '#eceef0');
-
-  function init() {
-    var small = W < 820, i, j;
-    chains = []; crosses = []; thorns = [];
-    var nc = small ? 4 : 7;
-    for (i = 0; i < nc; i++) {
-      var L = rnd(15, 22), n = Math.max(8, Math.min(40, Math.floor(rnd(0.3, 0.85) * H / L)));
-      var ax = (i + 0.5 + rnd(-0.25, 0.25)) * W / nc, nodes = [];
-      for (j = 0; j < n; j++) nodes.push({ x: ax, y: -10 + j * L, px: ax - rnd(-2, 2), py: -10 + j * L });
-      chains.push({ nodes: nodes, L: L, ax: ax, a: rnd(0.4, 0.85), cross: Math.random() < 0.6, spiky: Math.random() < 0.6, s: rnd(0.28, 0.4), ph: rnd(0, 6) });
-    }
-    for (i = 0; i < (small ? 7 : 12); i++) {
-      var z = rnd(0.25, 1), r0 = rnd(-0.5, 0.5);
-      crosses.push({ x: rnd(0, W), y: rnd(0, H), z: z, s: (0.2 + z * 0.5) * (small ? 0.8 : 1), rot0: r0, rot: r0, vr: 0, vx: 0, vy: 0, ph: rnd(0, 6) });
-    }
-    crosses.sort(function (a, b) { return a.z - b.z; });
-    for (i = 0; i < (small ? 18 : 34); i++) {
-      var side = i % 3, x, y, ang;
-      if (side === 0) { x = rnd(-10, 20); y = rnd(0, H); ang = rnd(-0.9, 0.9); }
-      else if (side === 1) { x = W + rnd(-20, 10); y = rnd(0, H); ang = Math.PI + rnd(-0.9, 0.9); }
-      else { x = rnd(0, W); y = H + rnd(-10, 14); ang = -Math.PI / 2 + rnd(-0.9, 0.9); }
-      thorns.push({ x: x, y: y, ang0: ang, ang: ang, av: 0, len: rnd(40, 95) * (small ? 0.8 : 1), ext: 1, ev: 0, w: rnd(0.7, 1.3), ph: rnd(0, 6) });
-    }
-  }
-
-  // Puntero (mouse o dedo) y toque
-  function setPtr(x, y) {
-    var had = ptr.x > -900;
-    ptr.vx = had ? x - ptr.x : 0; ptr.vy = had ? y - ptr.y : 0; ptr.x = x; ptr.y = y;
-  }
-  function leave() { ptr.x = ptr.y = -999; ptr.vx = ptr.vy = 0; }
-  window.addEventListener('pointermove', function (e) { setPtr(e.clientX, e.clientY); }, { passive: true });
-  ['touchstart', 'touchmove'].forEach(function (n) {
-    window.addEventListener(n, function (e) { var t = e.touches[0]; if (t) setPtr(t.clientX, t.clientY); }, { passive: true });
-  });
-  window.addEventListener('touchend', leave, { passive: true });
-  document.addEventListener('mouseleave', leave);
-  window.addEventListener('pointerdown', function (e) { shocks.push({ x: e.clientX, y: e.clientY }); }, { passive: true });
-
-  // Física
-  function stepChain(c) {
-    var n = c.nodes, i, k, p, a, b, dx, dy, d, f, diff;
-    for (i = 1; i < n.length; i++) {
-      p = n[i];
-      var vx = (p.x - p.px) * 0.985, vy = (p.y - p.py) * 0.985;
-      p.px = p.x; p.py = p.y;
-      p.x += vx + Math.sin(T * 0.8 + c.ph + i * 0.3) * 0.05;
-      p.y += vy + 0.55;
-      dx = p.x - ptr.x; dy = p.y - ptr.y; d = Math.sqrt(dx * dx + dy * dy);
-      if (d < 130 && d > 0.1) { f = 1 - d / 130; p.x += dx / d * f * 7 + ptr.vx * f * 0.25; p.y += dy / d * f * 3; }
-      shocks.forEach(function (s) {
-        var sx = p.x - s.x, sy = p.y - s.y, sd = Math.sqrt(sx * sx + sy * sy) || 1;
-        if (sd < 380) { var g = 1 - sd / 380; p.x += sx / sd * g * 22; p.y += sy / sd * g * 10; }
-      });
-      p.x += (Math.random() - 0.5) * Math.abs(scrollV) * 0.08 * (i / n.length);
-    }
-    for (k = 0; k < 10; k++) {
-      n[0].x = c.ax; n[0].y = -10;
-      for (i = 0; i < n.length - 1; i++) {
-        a = n[i]; b = n[i + 1]; dx = b.x - a.x; dy = b.y - a.y; d = Math.sqrt(dx * dx + dy * dy) || 1; diff = (d - c.L) / d;
-        if (i === 0) { b.x -= dx * diff; b.y -= dy * diff; }
-        else { a.x += dx * diff * 0.5; a.y += dy * diff * 0.5; b.x -= dx * diff * 0.5; b.y -= dy * diff * 0.5; }
-      }
-    }
-  }
-  function stepCross(c) {
-    var dx = c.x - ptr.x, dy = c.y - ptr.y, d = Math.sqrt(dx * dx + dy * dy) || 1, R = 120 + 160 * c.z, f;
-    if (d < R) {
-      f = 1 - d / R;
-      c.vx += dx / d * f * 0.6; c.vy += dy / d * f * 0.6;
-      c.vr += (dx * ptr.vy - dy * ptr.vx) / d * 0.004 * f + dx / d * f * 0.01;
-    }
-    shocks.forEach(function (s) {
-      var sx = c.x - s.x, sy = c.y - s.y, sd = Math.sqrt(sx * sx + sy * sy) || 1;
-      if (sd < 420) { var g = 1 - sd / 420; c.vx += sx / sd * g * 14; c.vy += sy / sd * g * 14; c.vr += g * (Math.random() - 0.5) * 0.5; }
-    });
-    c.vr += wrap(c.rot0 - c.rot) * 0.004; c.vr *= 0.95; c.vx *= 0.94; c.vy *= 0.94;
-    c.rot = (c.rot + c.vr) % TAU;
-    c.x += c.vx + Math.sin(T * 0.3 + c.ph) * 0.25 * c.z;
-    c.y += c.vy - 0.12 * c.z - scrollV * c.z * 0.5;
-    var m = 170 * c.s + 20;
-    if (c.y < -m) { c.y = H + m; c.x = rnd(0, W); } else if (c.y > H + m) { c.y = -m; c.x = rnd(0, W); }
-    if (c.x < -m) c.x = W + m; else if (c.x > W + m) c.x = -m;
-  }
-  function stepThorn(t) {
-    var dx = ptr.x - t.x, dy = ptr.y - t.y, d = Math.sqrt(dx * dx + dy * dy) || 1;
-    var target = t.ang0 + Math.sin(T * 0.7 + t.ph) * 0.06, ext = 1, k = 0.035;
-    if (d < 300) { var f = 1 - d / 300; target = Math.atan2(dy, dx); ext = 1 + f * 0.55; k = 0.09; }
-    shocks.forEach(function (s) {
-      var sx = t.x - s.x, sy = t.y - s.y, sd = Math.sqrt(sx * sx + sy * sy);
-      if (sd < 400) { t.ev += (1 - sd / 400) * 0.22; t.av += (Math.random() - 0.5) * 0.4; }
-    });
-    t.av += wrap(target - t.ang) * k; t.av *= 0.82; t.ang += t.av;
-    t.ev += (ext - t.ext) * 0.12; t.ev *= 0.8; t.ext += t.ev;
-  }
-
-  // Dibujo
-  function drawCross(x, y, r, s, a) {
-    ctx.save(); ctx.translate(x, y); ctx.rotate(r); ctx.scale(s, s); ctx.globalAlpha = a;
-    ctx.fillStyle = gradCross; ctx.fill(crossPath);
-    ctx.strokeStyle = '#000'; ctx.lineWidth = 3 / s; ctx.stroke(crossPath);
-    ctx.strokeStyle = 'rgba(235,238,242,.55)'; ctx.lineWidth = 1 / s; ctx.stroke(crossPath);
-    ctx.fillStyle = '#050505'; ctx.beginPath(); ctx.moveTo(0, -5); ctx.lineTo(5, 0); ctx.lineTo(0, 5); ctx.lineTo(-5, 0); ctx.closePath(); ctx.fill();
-    ctx.restore();
-  }
-  function drawThorn(t) {
-    var L = t.len * t.ext; if (L < 4) return;
-    ctx.save(); ctx.translate(t.x, t.y); ctx.rotate(t.ang); ctx.scale(L / 100, t.w); ctx.globalAlpha = 0.75;
-    ctx.beginPath(); ctx.moveTo(0, -7); ctx.quadraticCurveTo(55, -5, 100, 3); ctx.quadraticCurveTo(55, 4, 0, 7); ctx.closePath();
-    ctx.fillStyle = gradThorn; ctx.fill(); ctx.lineWidth = 1.2; ctx.strokeStyle = 'rgba(0,0,0,.85)'; ctx.stroke();
-    ctx.restore();
-  }
-  function drawChain(c) {
-    var n = c.nodes, i, a, b, mx, my, ang, rx = c.L * 0.66;
-    ctx.save(); ctx.globalAlpha = c.a;
-    for (i = 0; i < n.length - 1; i++) {
-      a = n[i]; b = n[i + 1]; mx = (a.x + b.x) / 2; my = (a.y + b.y) / 2; ang = Math.atan2(b.y - a.y, b.x - a.x);
-      var flat = i % 2 === 0, ry = c.L * (flat ? 0.32 : 0.12);
-      ctx.beginPath(); ctx.ellipse(mx, my, rx, ry, ang, 0, TAU);
-      ctx.lineWidth = flat ? 5.5 : 4.5; ctx.strokeStyle = '#000'; ctx.stroke();
-      ctx.lineWidth = flat ? 2.6 : 2.2; ctx.strokeStyle = i % 3 === 0 ? '#e1e3e6' : '#9da1a7'; ctx.stroke();
-      if (c.spiky && i % 3 === 1) {
-        var nx = Math.cos(ang + 1.5708), ny = Math.sin(ang + 1.5708), tx = Math.cos(ang) * 3, ty = Math.sin(ang) * 3;
-        ctx.fillStyle = '#c9ccd0';
-        for (var sg = -1; sg <= 1; sg += 2) {
-          ctx.beginPath(); ctx.moveTo(mx + nx * sg * ry - tx, my + ny * sg * ry - ty);
-          ctx.lineTo(mx + nx * sg * (ry + 14), my + ny * sg * (ry + 14));
-          ctx.lineTo(mx + nx * sg * ry + tx, my + ny * sg * ry + ty); ctx.closePath(); ctx.fill();
-        }
-      }
-    }
-    ctx.restore();
-    if (c.cross) {
-      var l = n[n.length - 1], p = n[n.length - 2], dx = p.x - l.x, dy = p.y - l.y, dl = Math.sqrt(dx * dx + dy * dy) || 1;
-      dx /= dl; dy /= dl;
-      drawCross(l.x - dx * 70 * c.s, l.y - dy * 70 * c.s, Math.atan2(dx, -dy), c.s, Math.min(1, c.a + 0.15));
-    }
-  }
-  function draw() {
-    ctx.clearRect(0, 0, W, H); ctx.lineJoin = 'round';
-    crosses.forEach(function (c) { if (c.z < 0.6) drawCross(c.x, c.y, c.rot, c.s, 0.12 + c.z * 0.45); });
-    thorns.forEach(drawThorn);
-    chains.forEach(drawChain);
-    crosses.forEach(function (c) { if (c.z >= 0.6) drawCross(c.x, c.y, c.rot, c.s, 0.12 + c.z * 0.45); });
-  }
-  function frame() {
-    T += 0.016;
-    var y = window.scrollY; scrollV = Math.max(-60, Math.min(60, y - lastY)); lastY = y;
-    chains.forEach(stepChain); crosses.forEach(stepCross); thorns.forEach(stepThorn);
-    shocks.length = 0; ptr.vx *= 0.7; ptr.vy *= 0.7;
-    draw();
-    if (!reduce) requestAnimationFrame(frame);
-  }
-  function size() {
-    W = lw = window.innerWidth; H = lh = window.innerHeight;
-    cv.width = W * dpr; cv.height = H * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0); init();
-  }
-  window.addEventListener('resize', function () {
-    if (window.innerWidth !== lw || Math.abs(window.innerHeight - lh) > 140) size();
-  });
-  size(); frame();
+  window.addEventListener('scroll', function () { nav(); kick(); }, { passive: true });
+  window.addEventListener('resize', function () { measure(); kick(); });
+  window.addEventListener('load', function () { measure(); kick(); });
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { measure(); kick(); });
+  measure(); nav(); kick();
 })();
