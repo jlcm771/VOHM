@@ -85,3 +85,94 @@
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { measure(); kick(); });
   measure(); nav(); kick();
 })();
+
+// 6. Grunge / nu-metal: glitch por velocidad de scroll, vibración, letras que reaccionan y amplificador
+(function () {
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var root = document.documentElement;
+  var shake = [document.querySelector('header'), document.querySelector('main'), document.querySelector('footer')];
+  var slider = document.getElementById('vol'), out = document.getElementById('volout'), mute = document.getElementById('mute');
+  var secs = [].slice.call(document.querySelectorAll('header,section,footer'));
+  var vol = 0, g = 0, imp = 0, lastY = window.scrollY, px = 0.5, py = 0.5, sx = 0.5, sy = 0.5, running = false, lastSec = -1;
+  function clamp(v) { return v < 0 ? 0 : v > 1 ? 1 : v; }
+  function kick() { if (!running) { running = true; requestAnimationFrame(loop); } }
+
+  // Audio: acorde de poder distorsionado, solo suena cuando subes el volumen
+  var ac = null, nodes = null, muted = false;
+  function audioStart() {
+    if (ac) { if (ac.state === 'suspended') ac.resume(); return; }
+    var AC = window.AudioContext || window.webkitAudioContext; if (!AC || muted) return;
+    ac = new AC();
+    var master = ac.createGain(); master.gain.value = 0;
+    var shaper = ac.createWaveShaper(), curve = new Float32Array(1024), k = 80, i;
+    for (i = 0; i < 1024; i++) { var x = i / 512 - 1; curve[i] = (3 + k) * x * 20 * (Math.PI / 180) / (Math.PI + k * Math.abs(x)); }
+    shaper.curve = curve; shaper.oversample = '4x';
+    var lp = ac.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 700; lp.Q.value = 4;
+    var mix = ac.createGain(); mix.gain.value = 0.5;
+    [[55, 'sawtooth', 0.4], [82.4, 'sawtooth', 0.4], [110.5, 'square', 0.3], [27.5, 'sine', 0.9]].forEach(function (f) {
+      var o = ac.createOscillator(), gg = ac.createGain(); o.type = f[1]; o.frequency.value = f[0]; gg.gain.value = f[2];
+      o.connect(gg); gg.connect(mix); o.start();
+    });
+    mix.connect(shaper); shaper.connect(lp); lp.connect(master); master.connect(ac.destination);
+    nodes = { master: master, lp: lp };
+  }
+  function audioUpdate() {
+    if (!ac || !nodes) return; var t = ac.currentTime;
+    nodes.master.gain.setTargetAtTime(muted ? 0 : vol * vol * 0.14, t, 0.08);
+    nodes.lp.frequency.setTargetAtTime(500 + g * 2600, t, 0.06);
+  }
+  document.addEventListener('visibilitychange', function () {
+    if (!ac) return; if (document.hidden) ac.suspend(); else if (vol > 0) ac.resume();
+  });
+
+  if (slider) {
+    slider.addEventListener('input', function () {
+      vol = slider.value / 100; out.textContent = slider.value;
+      slider.style.setProperty('--v', slider.value + '%'); root.style.setProperty('--vol', vol.toFixed(2));
+      if (vol > 0) audioStart(); kick();
+    });
+    slider.addEventListener('change', function () { if (vol > 0) audioStart(); });
+    mute.addEventListener('click', function () {
+      muted = !muted; mute.setAttribute('aria-pressed', muted);
+      if (!muted && vol > 0) audioStart(); kick();
+    });
+  }
+
+  // Interacción: puntero, scroll, toques y clics
+  window.addEventListener('pointermove', function (e) { px = e.clientX / window.innerWidth; py = e.clientY / window.innerHeight; kick(); }, { passive: true });
+  window.addEventListener('scroll', kick, { passive: true });
+  document.addEventListener('pointerover', function (e) {
+    var t = e.target;
+    if (t.classList && t.classList.contains('ch') && !t.classList.contains('hit')) {
+      t.classList.add('hit'); setTimeout(function () { t.classList.remove('hit'); }, 460);
+    }
+  }, { passive: true });
+  document.addEventListener('pointerdown', function (e) {
+    imp = Math.max(imp, 0.5);
+    var s = e.target.closest && e.target.closest('.split');
+    if (s && !s.classList.contains('blast')) { s.classList.add('blast'); imp = 0.9; setTimeout(function () { s.classList.remove('blast'); }, 1100); }
+    kick();
+  }, { passive: true });
+
+  function loop() {
+    var y = window.scrollY, v = reduce ? 0 : Math.abs(y - lastY); lastY = y;
+    var c = 0, h = window.innerHeight;
+    secs.forEach(function (s, i) { if (s.getBoundingClientRect().top < h * 0.4) c = i; });
+    if (lastSec > -1 && c !== lastSec && !reduce) imp = 1; lastSec = c;
+    imp *= 0.9; if (reduce) imp = 0;
+    var target = clamp(Math.max(v / 45, vol, imp * 0.8));
+    g += (target - g) * (target > g ? 0.5 : 0.08);
+    sx += (px - sx) * 0.12; sy += (py - sy) * 0.12;
+    var jx = g > 0.04 && !reduce ? (Math.random() - 0.5) * g * 12 : 0;
+    root.style.setProperty('--g', g.toFixed(3));
+    root.style.setProperty('--gx', ((sx - 0.5) * 14 + jx).toFixed(1) + 'px');
+    root.style.setProperty('--gy', ((sy - 0.5) * 8).toFixed(1) + 'px');
+    root.classList.toggle('glitching', g > 0.03);
+    var on = !reduce && vol > 0.02;
+    shake.forEach(function (el) { if (el) el.style.translate = on ? ((Math.random() - 0.5) * vol * 6).toFixed(1) + 'px ' + ((Math.random() - 0.5) * vol * 4).toFixed(1) + 'px' : ''; });
+    audioUpdate();
+    if (g < 0.01 && Math.abs(px - sx) < 0.002 && Math.abs(py - sy) < 0.002 && vol <= 0.02) running = false;
+    else requestAnimationFrame(loop);
+  }
+  kick();
+})();
