@@ -2,117 +2,112 @@
 <html lang="es"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>VÖHM — Proceso de identidad</title>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
+<script>document.documentElement.className='js'</script>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head><body>
-<div id="progress"></div><div id="spot"></div>
-<canvas id="dust" aria-hidden="true"></canvas>
-
-
+<div id="progress"></div>
 <nav><a href="#top">VÖHM</a><a href="#nombre">Nombre</a><a href="#esencia">Esencia</a><a href="#logo">Logotipo</a><a href="#color">Color</a><a href="#tipo">Tipografía</a><a href="#reticula">Retícula</a><a href="#apps">Aplicaciones</a><a href="#crisis">Crisis</a></nav>
 
 <header class="hero" id="top">
-  <img class="burst" src="assets/rayos.jpg" alt="">
-  <div class="heroin"><img class="logo" src="assets/logo.png" alt="Logotipo VÖHM" onload="this.parentNode.classList.add('hasLogo')" onerror="this.remove()">
-    <svg class="gem" viewBox="0 0 200 200" role="img" aria-label="Isotipo VÖHM">
-      <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f4f5f6"/><stop offset=".5" stop-color="#777b80"/><stop offset="1" stop-color="#d8d9db"/></linearGradient></defs>
-      <polygon points="8,16 70,16 104,150 92,176" fill="url(#g)"/><polygon points="192,16 130,16 96,150 108,176" fill="url(#g)"/>
-      <polygon points="70,16 100,92 130,16 100,52" fill="#050505"/>
-      <polygon class="jewel" points="100,60 114,80 100,104 86,80" fill="#7a1c1f" stroke="#e8e8e8" stroke-width="2"/>
-    </svg>
-    <h1 class="glitch silver" data-text="VOHM">VOHM</h1>
-    <p class="tag">THE WEIGHT OF BEING</p>
-    <p class="sub">Proceso de creación de una identidad: joyería que traduce la intensidad del sonido en formas físicas.</p>
-    <a class="cta" href="#nombre">Entrar al proceso</a>
+  <div class="heroin">
+    <div class="slices" id="slices"><img src="assets/logo.png" alt="Logotipo VÖHM"></div>
+    <div class="rest">
+      <p class="tag">THE WEIGHT OF BEING</p>
+      <p class="sub">Proceso de creación de una identidad: joyería que traduce la intensidad del sonido en formas físicas.</p>
+      <a class="cta" href="#nombre">Entrar al proceso</a>
+    </div>
   </div>
 </header>
 
-<div class="marquee" aria-hidden="true"><div><span>THE WEIGHT OF BEING ✝ VÖHM ✝ GRUNGE ✝ NU-METAL ✝ JOYERÍA ✝ </span><span>THE WEIGHT OF BEING ✝ VÖHM ✝ GRUNGE ✝ NU-METAL ✝ JOYERÍA ✝ </span></div></div>
-
 <main>
 <section id="nombre"><div class="wrap">
-  <h2 class="silver rv">Un nombre que vibra</h2>
-  <p class="lead rv">VÖHM nace de una invención fonética: la onomatopeya del zumbido de un amplificador unida a la palabra “volumen”. Al pronunciarlo se siente una vibración en los labios, fuerza e intensidad antes que significado.</p>
-  <p class="lead dim rv">La diéresis sobre la O aporta un carácter industrial y distintivo. Es la pequeña marca que vuelve el nombre irrepetible.</p>
+  <h2 class="split">Un nombre que vibra</h2>
+  <div class="eq">
+    <span class="a" data-fx="l">Zumbido</span><span class="pl" data-fx="z" data-d=".15">+</span><span class="a" data-fx="r">Volumen</span><span class="pl" data-fx="z" data-d=".35">=</span><span class="vohm silver" data-fx="u" data-d=".45">VOHM</span>
+  </div>
+  <p class="lead" data-fx="l">VÖHM nace de una invención fonética: la onomatopeya del zumbido de un amplificador unida a la palabra “volumen”. Al pronunciarlo se siente una vibración en los labios, fuerza e intensidad antes que significado.</p>
+  <p class="lead dim" data-fx="r">La diéresis sobre la O aporta un carácter industrial y distintivo. Es la pequeña marca que vuelve el nombre irrepetible.</p>
 </div></section>
 
 <section id="esencia"><div class="wrap">
-  <h2 class="silver rv">Crudeza con precisión</h2>
-  <p class="lead rv">La estética grunge y nu-metal guía toda la marca: crudeza, intensidad y una fuerte carga emocional. VÖHM diseña arquitecturas de exhibición que dan impacto visual a tu joyería.</p>
+  <h2 class="split">Crudeza con precisión</h2>
+  <p class="lead" data-fx="u">La estética grunge y nu-metal guía toda la marca: crudeza, intensidad y una fuerte carga emocional. VÖHM diseña arquitecturas de exhibición que dan impacto visual a tu joyería.</p>
   <div class="three">
-    <div class="card rv"><h3>Misión</h3><p>Materializar la energía del sonido en estructuras físicas de alta calidad y conectar tu identidad musical con tu espacio cotidiano.</p></div>
-    <div class="card rv"><h3>Visión</h3><p>Ser el referente global del diseño grunge, con cada pieza de joyería descansando sobre una obra de arte.</p></div>
-    <div class="card rv"><h3>Valores</h3><p><b>Auténtico:</b> la belleza de la imperfección. <b>Preciso:</b> ingeniería digital y acabado artesanal. <b>Experimental:</b> no encajar, destacar.</p></div>
+    <div class="card" data-fx="l"><h3>Misión</h3><p>Materializar la energía del sonido en estructuras físicas de alta calidad y conectar tu identidad musical con tu espacio cotidiano.</p></div>
+    <div class="card" data-fx="d" data-d=".1"><h3>Visión</h3><p>Ser el referente global del diseño grunge, con cada pieza de joyería descansando sobre una obra de arte.</p></div>
+    <div class="card" data-fx="r" data-d=".2"><h3>Valores</h3><p><b>Auténtico:</b> la belleza de la imperfección. <b>Preciso:</b> ingeniería digital y acabado artesanal. <b>Experimental:</b> no encajar, destacar.</p></div>
   </div>
 </div></section>
 
 <section id="logo"><div class="wrap cols">
-  <div><h2 class="silver rv">Una V hecha de filo</h2>
-  <p class="rv">Me inspiré en púas de guitarra y piezas metálicas afiladas. Formas geométricas puntiagudas y simétricas transmiten agresividad y tensión, y juntas construyen la V inicial del nombre.</p>
-  <p class="dim rv">Después incorporé una gema en el centro: equilibra la composición y ancla la marca al mundo de la joyería.</p>
-  <div class="chips rv"><span>Púa de guitarra</span><span>Metal afilado</span><span>Simetría</span><span>Gema</span></div></div>
-  <div class="stage rv"><img class="inv spin" src="assets/estrellas.jpg" alt=""><img class="logo2" src="assets/logo.png" alt="Logotipo VÖHM"></div>
+  <div><h2 class="split">Una V hecha de filo</h2>
+  <p data-fx="l">Me inspiré en púas de guitarra y piezas metálicas afiladas. Formas geométricas puntiagudas y simétricas transmiten agresividad y tensión, y juntas construyen la V inicial del nombre.</p>
+  <p class="dim" data-fx="l" data-d=".15">Después incorporé una gema en el centro: equilibra la composición y ancla la marca al mundo de la joyería.</p>
+  <div class="chips"><span data-fx="z">Púa de guitarra</span><span data-fx="z" data-d=".2">Metal afilado</span><span data-fx="z" data-d=".4">Simetría</span><span data-fx="z" data-d=".6">Gema</span></div></div>
+  <div class="stage" data-fx="r"><img data-fx="z" data-d=".3" src="assets/logo.png" alt="Logotipo VÖHM"></div>
 </div></section>
 
 <section id="color"><div class="wrap">
-  <h2 class="silver rv">Oscuridad con peso</h2>
-  <p class="lead rv">Tonos oscuros y neutros que refuerzan el contraste y la energía del género. El negro aporta misterio, el rojo profundo carga emocional y el blanco hueso devuelve claridad sin perder sobriedad.</p>
+  <h2 class="split">Oscuridad con peso</h2>
+  <p class="lead" data-fx="u">Tonos oscuros y neutros que refuerzan el contraste y la energía del género. El negro aporta misterio, el rojo profundo carga emocional y el blanco hueso devuelve claridad sin perder sobriedad.</p>
   <div class="pals">
-    <div class="sw rv" style="background:#101820"><b>Black 6 C</b>#101820<br>C80 M71 Y60 K76</div>
-    <div class="sw rv" style="background:#3F2021"><b>Rojo profundo</b>#3F2021</div>
-    <div class="sw rv" style="background:#F0EEE9;color:#101820"><b>Cloud Dancer 11-4201</b>#F0EEE9<br>C4 M4 Y7 K0</div>
-    <div class="sw rv sheen" style="color:#050505"><b>Plata desgastada</b>acento de la web</div>
+    <div class="sw" data-fx="l" style="background:#101820"><b>Black 6 C</b>#101820<br>C80 M71 Y60 K76</div>
+    <div class="sw" data-fx="d" data-d=".1" style="background:#3F2021"><b>Rojo profundo</b>#3F2021</div>
+    <div class="sw" data-fx="u" data-d=".2" style="background:#F0EEE9;color:#101820"><b>Cloud Dancer 11-4201</b>#F0EEE9<br>C4 M4 Y7 K0</div>
+    <div class="sw sheen" data-fx="r" data-d=".3" style="color:#050505"><b>Plata desgastada</b>acento de la web</div>
   </div>
 </div></section>
 
 <section id="tipo"><div class="wrap">
-  <h2 class="silver rv">Elegante y roto</h2>
-  <p class="lead rv">Combiné serifs clásicas, que evocan la joyería tradicional, con una serif intervenida con cortes irregulares: desgaste, rebeldía y crudeza.</p>
+  <h2 class="split">Elegante y roto</h2>
+  <p class="lead" data-fx="u">Combiné serifs clásicas, que evocan la joyería tradicional, con una serif intervenida con cortes irregulares: desgaste, rebeldía y crudeza.</p>
   <div class="types">
-    <div class="card rv"><h3 class="f-angel">Angel</h3><div class="big ang silver">Aa</div><p class="f-angel dim">Serif intervenida para el logotipo y los momentos de ruptura.</p></div>
-    <div class="card rv"><h3 class="f-felix">Felix Titling</h3><div class="big silver">Aa</div><p class="f-felix dim">Serif clásica en mayúsculas para titulares y lema.</p></div>
-    <div class="card rv"><h3 class="f-times">Times New Roman</h3><div class="big silver" style="font-family:'Times New Roman',serif;font-weight:400">Aa</div><p class="f-times dim">Texto corrido, sobrio y legible.</p></div>
+    <div class="card" data-fx="l"><h3 class="f-angel">Angel</h3><div class="big ang silver" data-fx="z" data-d=".3">Aa</div><p>Serif intervenida para el logotipo y los momentos de ruptura.</p></div>
+    <div class="card" data-fx="u" data-d=".1"><h3 class="f-felix">Felix Titling</h3><div class="big silver" data-fx="z" data-d=".4">Aa</div><p>Serif clásica en mayúsculas para titulares y lema.</p></div>
+    <div class="card" data-fx="r" data-d=".2"><h3 class="f-times">Times New Roman</h3><div class="big silver f-times" data-fx="z" data-d=".5">Aa</div><p>Texto corrido, sobrio y legible.</p></div>
   </div>
 </div></section>
 
 <section id="reticula"><div class="wrap">
-  <h2 class="silver rv">Construcción y límites</h2>
-  <p class="lead rv">El logotipo se apoya en una retícula modular (x, 2x, 3x, 10x, 12x, 16x) que mantiene las proporciones entre isotipo y letras.</p>
-  <div class="xs rv" aria-hidden="true"><i style="--w:20px"></i><i style="--w:60px"></i><i style="--w:200px"></i><i style="--w:120px"></i><i style="--w:160px"></i></div>
+  <h2 class="split">Construcción y límites</h2>
+  <p class="lead" data-fx="u">El logotipo se apoya en una retícula modular (x, 2x, 3x, 10x, 12x, 16x) que mantiene las proporciones entre isotipo y letras.</p>
+  <div class="xs" aria-hidden="true"><i data-fx="g" style="--w:20px"></i><i data-fx="g" data-d=".12" style="--w:60px"></i><i data-fx="g" data-d=".24" style="--w:200px"></i><i data-fx="g" data-d=".36" style="--w:120px"></i><i data-fx="g" data-d=".48" style="--w:160px"></i></div>
   <div class="grid">
-    <article class="rv"><h3>Tamaños mínimos</h3><p>Logotipo completo: 30 mm (354.9 px). Versión compacta: 18 mm (212.5 px).</p></article>
-    <article class="rv"><h3>Versiones</h3><p>Positivo y negativo, con el lema THE WEIGHT OF BEING bajo el nombre.</p></article>
-    <article class="rv"><h3>Usos no permitidos</h3><p>Logotipo de lado, isotipo angosto o aplastado, letras sobre el isotipo y tipografía diminuta.</p></article>
+    <article data-fx="l"><h3>Tamaños mínimos</h3><p>Logotipo completo: 30 mm (354.9 px). Versión compacta: 18 mm (212.5 px).</p></article>
+    <article data-fx="r" data-d=".1"><h3>Versiones</h3><p>Positivo y negativo, con el lema THE WEIGHT OF BEING bajo el nombre.</p></article>
+    <article data-fx="l" data-d=".2"><h3>Usos no permitidos</h3><p>Logotipo de lado, isotipo angosto o aplastado, letras sobre el isotipo y tipografía diminuta.</p></article>
   </div>
 </div></section>
 
 <section id="apps"><div class="wrap">
-  <h2 class="silver rv">La marca en objetos</h2>
-  <p class="lead rv">El grunge y el nu-metal hoy conviven con estilos de vida activos. Por eso la identidad se extiende a piezas de uso cotidiano, cada una con su técnica.</p>
+  <h2 class="split">La marca en objetos</h2>
+  <p class="lead" data-fx="u">El grunge y el nu-metal hoy conviven con estilos de vida activos. Por eso la identidad se extiende a piezas de uso cotidiano, cada una con su técnica.</p>
   <div class="grid">
-    <article class="rv"><h3>Caja de presentación</h3><p>Forrada a mano con vinil adhesivo negro mate; logotipo en vinil blanco brillante cortado con plotter.</p></article>
-    <article class="rv"><h3>Bolsitas para joyería</h3><p>Impresión DTF: el diseño se imprime en película y se transfiere a la tela con calor y presión.</p></article>
-    <article class="rv"><h3>Hoodie y bolsa deportiva</h3><p>También en DTF, con acabado resistente, duradero y de alta definición.</p></article>
-    <article class="rv"><h3>Tarjeta de presentación</h3><p>PVC con corte y grabado láser, para detalles precisos y acabado profesional.</p></article>
+    <article data-fx="l"><h3>Caja de presentación</h3><p>Forrada a mano con vinil adhesivo negro mate; logotipo en vinil blanco brillante cortado con plotter.</p></article>
+    <article data-fx="r"><h3>Bolsitas para joyería</h3><p>Impresión DTF: el diseño se imprime en película y se transfiere a la tela con calor y presión.</p></article>
+    <article data-fx="l"><h3>Hoodie y bolsa deportiva</h3><p>También en DTF, con acabado resistente, duradero y de alta definición.</p></article>
+    <article data-fx="r"><h3>Tarjeta de presentación</h3><p>PVC con corte y grabado láser, para detalles precisos y acabado profesional.</p></article>
   </div>
 </div></section>
 
 <section id="crisis"><div class="wrap">
-  <h2 class="silver rv">Cuando la marca se pone a prueba</h2>
-  <p class="lead rv">Caso de gestión de crisis: VÖHM lanzó una colección colaborativa inspirada en experiencias reales. Una participante se sintió expuesta y la marca fue acusada de usar el dolor como recurso creativo.</p>
-  <div class="quote silver rv">No contamos vidas.<br>Traducimos emociones.</div>
-  <p class="lead rv">La marca no retira la colección ni abandona su identidad emocional: pasa de “usar historias personales” a traducir emociones universales como vacío, duelo, transformación, nostalgia, memoria y reconstrucción.</p>
-  <div class="time">
-    <div class="rv"><h3>Carrusel para redes</h3><p class="dim">Comunica el nuevo posicionamiento.</p></div>
-    <div class="rv"><h3>Póster</h3><p class="dim">“Some feelings should stay faceless”: la emoción inspira el diseño sin exponer historias personales.</p></div>
-    <div class="rv"><h3>Video</h3><p class="dim">Refuerza el mensaje en movimiento.</p></div>
+  <h2 class="split">Cuando la marca se pone a prueba</h2>
+  <p class="lead" data-fx="u">Caso de gestión de crisis: VÖHM lanzó una colección colaborativa inspirada en experiencias reales. Una participante se sintió expuesta y la marca fue acusada de usar el dolor como recurso creativo.</p>
+  <div class="quote"><span class="split">No contamos vidas.</span><span class="split">Traducimos emociones.</span></div>
+  <p class="lead" data-fx="u">La marca no retira la colección ni abandona su identidad emocional: pasa de “usar historias personales” a traducir emociones universales como vacío, duelo, transformación, nostalgia, memoria y reconstrucción.</p>
+  <div class="time" data-fx="v">
+    <div data-fx="l"><h3>Carrusel para redes</h3><p class="dim">Comunica el nuevo posicionamiento.</p></div>
+    <div data-fx="l" data-d=".15"><h3>Póster</h3><p class="dim">“Some feelings should stay faceless”: la emoción inspira el diseño sin exponer historias personales.</p></div>
+    <div data-fx="l" data-d=".3"><h3>Video</h3><p class="dim">Refuerza el mensaje en movimiento.</p></div>
   </div>
 </div></section>
 </main>
 
-<footer><img class="foot" src="assets/estrellas.jpg" alt="">
-  <div class="fin"><div class="t silver">VOHM</div><p class="tag">THE WEIGHT OF BEING</p>
-  <p class="dim small">José Luis Casillas Martín · Licenciatura en Diseño Interactivo<br>Identidad e Imagen Corporativa, 2026</p></div>
+<footer>
+  <div class="t split">VOHM</div>
+  <p class="tag" data-fx="u">THE WEIGHT OF BEING</p>
+  <p class="dim small" data-fx="u" data-d=".2">José Luis Casillas Martín · Licenciatura en Diseño Interactivo<br>Identidad e Imagen Corporativa, 2026</p>
 </footer>
 <script src="script.js"></script>
 </body></html>
