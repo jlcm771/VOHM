@@ -169,13 +169,13 @@
       });
     });
   }
-  function kick(t, v) {
+  function kickDrum(t, v) {
     var o = ac.createOscillator(), g = ac.createGain();
     o.frequency.setValueAtTime(150, t); o.frequency.exponentialRampToValueAtTime(40, t + 0.13);
     g.gain.setValueAtTime(v, t); g.gain.exponentialRampToValueAtTime(0.001, t + 0.38);
     o.connect(g); g.connect(nodes.drum); o.start(t); o.stop(t + 0.4);
   }
-  function snare(t, v) {
+  function snareDrum(t, v) {
     var s = ac.createBufferSource(), f = ac.createBiquadFilter(), g = ac.createGain(), o = ac.createOscillator(), og = ac.createGain();
     s.buffer = noiseBuf; f.type = 'bandpass'; f.frequency.value = 1900; f.Q.value = 0.7;
     g.gain.setValueAtTime(v, t); g.gain.exponentialRampToValueAtTime(0.001, t + 0.22);
@@ -190,10 +190,10 @@
     PAT[bar].forEach(function (e) {
       if (e[0] !== s) return;
       strum(e[2], e[1], t, e[1] === 'm' ? 0.65 + Math.random() * 0.2 : 0.9);
-      if (heavy) kick(t, e[1] === 'm' ? 0.6 : 0.95);
+      if (heavy) kickDrum(t, e[1] === 'm' ? 0.6 : 0.95);
     });
-    if (heavy && (s === 4 || s === 12)) snare(t, 0.55);
-    if (!heavy) { if (s === 0 || s === 8) kick(t, 0.55); if (s === 12) snare(t, 0.25); }
+    if (heavy && (s === 4 || s === 12)) snareDrum(t, 0.55);
+    if (!heavy) { if (s === 0 || s === 8) kickDrum(t, 0.55); if (s === 12) snareDrum(t, 0.25); }
   }
   function sched() { while (nextT < ac.currentTime + 0.3) { playStep(stepN, nextT); nextT += STEP; stepN = (stepN + 1) % 64; } }
   function seq(on) {
